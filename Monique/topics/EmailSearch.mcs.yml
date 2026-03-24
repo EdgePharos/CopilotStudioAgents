@@ -1,0 +1,46 @@
+mcs.metadata:
+  componentName: EmailSearch
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Sök e-post
+    triggerQueries:
+      - Sök i mejlen
+      - Hitta mejl om
+      - Sök efter mejl
+      - Har jag fått mejl från
+      - Leta efter mejl
+      - Sök e-post
+      - Hitta meddelande om
+      - Mejl angående
+      - Sök mail
+      - Hitta mail från
+
+  actions:
+    - kind: Question
+      id: question_searchQuery
+      interruptionPolicy:
+        allowInterruption: true
+      variable: init:Topic.SearchQuery
+      prompt: Vad vill du söka efter i mejlen?
+      entity: StringPrebuiltEntity
+
+    - kind: SendActivity
+      id: sendMessage_searchLoading
+      activity: "Söker efter \"{Topic.SearchQuery}\" i Claudios mejl..."
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_emailSearch
+      input:
+        binding:
+          text: =Topic.SearchQuery
+      output:
+        binding:
+          searchresults: Topic.searchresults
+      flowId: e4f42ac5-0b1b-4f5a-829a-7f2b8dbc9fec
+
+    - kind: SendActivity
+      id: sendActivity_searchResult
+      activity: "{Topic.searchresults}"

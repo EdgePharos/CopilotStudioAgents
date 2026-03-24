@@ -1,0 +1,38 @@
+mcs.metadata:
+  componentName: InboxSummary
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Inkorgssammanfattning
+    triggerQueries:
+      - Visa min inkorg
+      - Kolla nya mejl
+      - Har jag fått några mejl
+      - Sammanfatta inkorgen
+      - Visa olästa mejl
+      - E-postsammanfattning
+      - Vad finns i inkorgen
+      - Kolla mejlen
+      - Några nya meddelanden
+      - Visa mejl
+      - Nya mejl
+
+  actions:
+    - kind: SendActivity
+      id: sendMessage_inboxLoading
+      activity: "Hämtar dina senaste mejl, un moment..."
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_inbox
+      input:
+        binding: {}
+      output:
+        binding:
+          mailresults: Topic.mailresults
+      flowId: 9a5ee067-6866-458b-86e9-8fd57e5e6731
+
+    - kind: SendActivity
+      id: sendActivity_inboxResult
+      activity: "{Topic.mailresults}"

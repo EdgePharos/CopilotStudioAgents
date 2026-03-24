@@ -1,0 +1,47 @@
+mcs.metadata:
+  componentName: CalendarToday
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Kalenderöversikt
+    triggerQueries:
+      - Visa kalendern
+      - Vad har jag idag
+      - Vilka möten har jag
+      - Visa dagens schema
+      - Kalenderöversikt
+      - Vad händer idag
+      - Vilka möten har jag imorgon
+      - Visa veckans kalender
+      - Har jag några möten
+      - Dagens möten
+      - Kolla kalendern
+
+  actions:
+    - kind: Question
+      id: question_calendarDate
+      interruptionPolicy:
+        allowInterruption: true
+      variable: init:Topic.DateInput
+      prompt: "Vilket datum vill du se kalendern för? (ÅÅÅÅ-MM-DD)"
+      entity: StringPrebuiltEntity
+
+    - kind: SendActivity
+      id: sendMessage_calendarLoading
+      activity: "Hämtar kalendern för {Topic.DateInput}..."
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_calendar
+      input:
+        binding:
+          text: =Topic.DateInput
+      output:
+        binding:
+          calendarresults: Topic.calendarresults
+      flowId: 0a10d8e1-e199-46e8-bad7-9b9967539820
+
+    - kind: SendActivity
+      id: sendActivity_calendarResult
+      activity: "{Topic.calendarresults}"

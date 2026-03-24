@@ -1,0 +1,11 @@
+mcs.metadata:
+  componentName: Hämta kalender
+kind: TaskDialog
+outputs:
+  - propertyName: calendarresults
+
+action:
+  kind: InvokeFlowTaskAction
+  flowId: 0a10d8e1-e199-46e8-bad7-9b9967539820
+
+outputMode: All

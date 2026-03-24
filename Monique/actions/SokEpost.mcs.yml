@@ -1,0 +1,11 @@
+mcs.metadata:
+  componentName: Sök e-post
+kind: TaskDialog
+outputs:
+  - propertyName: searchresults
+
+action:
+  kind: InvokeFlowTaskAction
+  flowId: e4f42ac5-0b1b-4f5a-829a-7f2b8dbc9fec
+
+outputMode: All

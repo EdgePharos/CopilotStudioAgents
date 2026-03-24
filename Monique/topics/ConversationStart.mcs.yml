@@ -10,6 +10,6 @@ beginDialog:
       id: sendMessage_M0LuhV
       activity:
         text:
-          - Hej, jag är {System.Bot.Name}, en virtuell assistent. Bara så du vet använder jag ibland AI för att besvara dina frågor. Om du angav en webbplats under skapandet kan du fråga mig om den! Sedan kan du ge mig lite mer kunskap genom att konfigurera generativ AI.
+          - "Hej, det här är Monique, Claudios assistent. Vad kan jag hjälpa dig med?"
         speak:
-          - Hej och tack för att du tar kontakt med {System.Bot.Name}. Observera att vissa svar genereras av AI och du bör kontrollera att de stämmer. Hur kan jag hjälpa dig i dag?
+          - "Hej, det här är Monique, Claudios assistent. Vad kan jag hjälpa dig med?"

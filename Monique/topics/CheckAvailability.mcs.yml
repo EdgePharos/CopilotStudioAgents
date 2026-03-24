@@ -1,0 +1,47 @@
+mcs.metadata:
+  componentName: CheckAvailability
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Kolla lediga tider
+    triggerQueries:
+      - Kolla lediga tider
+      - När är Claudio ledig
+      - Hitta en ledig tid
+      - Visa tillgänglighet
+      - Finns det tid för ett möte
+      - Lediga tider idag
+      - När kan vi boka
+      - Kolla schemat
+      - Visa lediga luckor
+      - Lediga tider imorgon
+      - Boka en tid
+
+  actions:
+    - kind: Question
+      id: question_availabilityDate
+      interruptionPolicy:
+        allowInterruption: true
+      variable: init:Topic.DateInput
+      prompt: "Vilket datum vill du kolla tillgängligheten för? (ÅÅÅÅ-MM-DD)"
+      entity: StringPrebuiltEntity
+
+    - kind: SendActivity
+      id: sendMessage_availabilityLoading
+      activity: "Kollar lediga tider för {Topic.DateInput}..."
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_availability
+      input:
+        binding:
+          text: =Topic.DateInput
+      output:
+        binding:
+          availabilityresults: Topic.availabilityresults
+      flowId: b0611270-ad4a-415f-b563-cd184410444c
+
+    - kind: SendActivity
+      id: sendActivity_availabilityResult
+      activity: "{Topic.availabilityresults}"

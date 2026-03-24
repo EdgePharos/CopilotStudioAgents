@@ -1,0 +1,11 @@
+mcs.metadata:
+  componentName: Kolla lediga tider
+kind: TaskDialog
+outputs:
+  - propertyName: availabilityresults
+
+action:
+  kind: InvokeFlowTaskAction
+  flowId: b0611270-ad4a-415f-b563-cd184410444c
+
+outputMode: All

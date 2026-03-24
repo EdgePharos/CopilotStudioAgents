@@ -1,0 +1,155 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "keyvault": {
+        "api": {
+          "id": "/subscriptions/{subscription-id}/providers/Microsoft.Web/locations/{region}/managedApis/keyvault"
+        },
+        "connection": {
+          "id": "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Web/connections/keyvault"
+        },
+        "authentication": {
+          "type": "ManagedServiceIdentity"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "9a5ee067-trigger"
+          },
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_Client_Secret_from_Key_Vault": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "kv-get-secret-monique"
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['keyvault']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/secrets/@{encodeURIComponent('agent-711d4394-secret')}/value"
+          }
+        },
+        "HTTP": {
+          "runAfter": {
+            "Get_Client_Secret_from_Key_Vault": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "oauth-token-request"
+          },
+          "type": "Http",
+          "inputs": {
+            "uri": "https://login.microsoftonline.com/1d7bf184-976a-4221-bbb4-18240175ed7d/oauth2/v2.0/token",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            "body": "@concat('client_id=711d4394-f757-49b1-8d5b-7302d8384b66&scope=https://graph.microsoft.com/.default&client_secret=',body('Get_Client_Secret_from_Key_Vault')?['value'],'&grant_type=client_credentials')"
+          }
+        },
+        "Parse_JSON": {
+          "runAfter": {
+            "HTTP": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "parse-token-response"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": "@body('HTTP')",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "access_token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "HTTP_2": {
+          "runAfter": {
+            "Parse_JSON": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "graph-get-inbox"
+          },
+          "type": "Http",
+          "inputs": {
+            "uri": "https://graph.microsoft.com/v1.0/users/claudio@enknapp.nu/messages?$top=15&$filter=isRead eq false&$select=id,subject,from,receivedDateTime,importance,isRead,bodyPreview&$orderby=receivedDateTime desc",
+            "method": "GET",
+            "headers": {
+              "Authorization": "Bearer @{body('Parse_JSON')?['access_token']}"
+            }
+          }
+        },
+        "Respond_to_Copilot": {
+          "runAfter": {
+            "HTTP_2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "respond-inbox"
+          },
+          "type": "Response",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mailresults": {
+                  "title": "MailResults",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "statusCode": 200,
+            "body": {
+              "mailresults": "@{body('HTTP_2')}"
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

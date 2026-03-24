@@ -1,0 +1,11 @@
+mcs.metadata:
+  componentName: Hämta inkorg
+kind: TaskDialog
+outputs:
+  - propertyName: mailresults
+
+action:
+  kind: InvokeFlowTaskAction
+  flowId: 9a5ee067-6866-458b-86e9-8fd57e5e6731
+
+outputMode: All

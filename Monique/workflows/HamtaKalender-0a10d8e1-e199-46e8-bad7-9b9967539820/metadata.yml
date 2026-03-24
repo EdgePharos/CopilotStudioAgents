@@ -1,0 +1,30 @@
+jsonFileName: workflows/HamtaKalender-0a10d8e1-e199-46e8-bad7-9b9967539820/workflow.json
+workflowId: 0a10d8e1-e199-46e8-bad7-9b9967539820
+name: Hämta kalender
+type: 1
+description:
+subprocess: false
+category: 5
+mode: 0
+scope: 4
+onDemand: false
+triggerOnCreate: false
+triggerOnDelete: false
+asyncAutodelete: false
+syncWorkflowLogOnFailure: false
+stateCode: 1
+statusCode: 2
+runAs: 1
+isTransacted: true
+introducedVersion: 1.0.0.0
+isCustomizable:
+  value: true
+  canBeChanged: true
+  managedPropertyLogicalName: iscustomizableanddeletable
+businessProcessType: 0
+isCustomProcessingStepAllowedForOtherPublishers:
+  value: true
+  canBeChanged: true
+  managedPropertyLogicalName: canbedeleted
+modernFlowType: 0
+primaryEntity: none

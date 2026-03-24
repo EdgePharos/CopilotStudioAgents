@@ -19,9 +19,9 @@ beginDialog:
       id: sendMessage_abmysR
       activity:
         text:
-          - Hej. Vad kan jag hjälpa dig med i dag?
+          - "Hej! Monique här. Vad kan jag göra för dig?"
         speak:
-          - Hej, <break strength="medium" />, vad kan jag hjälpa dig med?
+          - "Hej! Monique här. Vad kan jag göra för dig?"
 
     - kind: CancelAllDialogs
       id: cancelAllDialogs_01At22
