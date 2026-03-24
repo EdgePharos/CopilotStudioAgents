@@ -1,0 +1,8 @@
+mcs.metadata:
+  componentName: https://learn.microsoft.com/en-us/graph/api/
+  description: Microsoft Graph REST API-referens - endpoints, parametrar, svar, exempel
+kind: KnowledgeSourceConfiguration
+source:
+  kind: PublicSiteSearchSource
+  triggerCondition: true
+  site: https://learn.microsoft.com/en-us/graph/api/

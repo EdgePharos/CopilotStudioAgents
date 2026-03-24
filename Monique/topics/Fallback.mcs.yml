@@ -1,0 +1,22 @@
+mcs.metadata:
+  componentName: Reserv
+  description: Det här systemämnet utlöses när användarens talindata inte matchar några befintliga ämnen.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnUnknownIntent
+  id: main
+  actions:
+    - kind: ConditionGroup
+      id: conditionGroup_LktzXw
+      conditions:
+        - id: conditionItem_tlGIVo
+          condition: =System.FallbackCount < 3
+          actions:
+            - kind: SendActivity
+              id: sendMessage_QZreqo
+              activity: Jag vet inte riktigt hur jag kan hjälpa dig med det. Kan du omformulera frågan?
+
+      elseActions:
+        - kind: BeginDialog
+          id: 5aXj5M
+          dialog: enk_Monique.topic.Escalate

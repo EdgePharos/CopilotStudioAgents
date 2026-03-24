@@ -1,0 +1,11 @@
+mcs.metadata:
+  componentName: Sök användare via Graph
+kind: TaskDialog
+outputs:
+  - propertyName: userresults
+
+action:
+  kind: InvokeFlowTaskAction
+  flowId: 6115dc92-0327-f111-88b5-7ced8d46f2ca
+
+outputMode: All

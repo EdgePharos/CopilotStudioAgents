@@ -1,0 +1,72 @@
+mcs.metadata:
+  componentName: Eskalera
+  description: |-
+    Det här systemämnet utlöses när användaren anger att den vill tala med en representant.
+    Du kan konfigurera hur agenten ska hantera överlämningen till mänskliga handläggare i agentens inställningar.
+    Om agenten inte hanterar eskaleringar ska det här avsnittet inaktiveras.
+kind: AdaptiveDialog
+startBehavior: CancelOtherTopics
+beginDialog:
+  kind: OnEscalate
+  id: main
+  intent:
+    displayName: Eskalera
+    includeInOnSelectIntent: false
+    triggerQueries:
+      - Prata med en handläggare
+      - Prata med en person
+      - Tala med någon
+      - Motringning
+      - Ring upp
+      - Ring kundtjänst
+      - Kan ni ringa mig
+      - Ring supporten
+      - Ring teknisk support
+      - Kan en handläggare ringa mig
+      - Kan jag ringa
+      - Kan jag kontakta någon annan
+      - Kan jag få support av en verklig handläggare
+      - Kan jag få hjälp av en verklig handläggare
+      - Kan jag överföras till en person som jag kan ringa
+      - Kan jag få komma till en person som jag kan ringa
+      - Kan jag få ett telefonnummer eller bli uppringd
+      - Kan en representant ringa upp mig
+      - Kan en representant ringa mig
+      - Kan jag boka in ett samtal
+      - Kan jag få tala med en representant
+      - Kan jag få tala med en människa
+      - Kan jag få tala med en mänsklig assistent
+      - Kan någon ringa upp mig
+      - Kan någon ringa mig
+      - Chatta med en människa
+      - Chatta med en representant
+      - Chatta med handläggare
+      - Chatta med någon, tack
+      - Koppla mig till en live-handläggare
+      - Koppla mig till en person
+      - Kan någon kontakta mig per telefon
+      - Kundhandläggare
+      - Kundrepresentant
+      - Kundtjänst
+      - Jag vill att en chef kontaktar mig
+      - Kan en chef kontakta mig
+      - Jag behöver kundservice
+      - Jag behöver hjälp från en person
+      - Jag behöver tala med en live-handläggare
+      - Jag behöver tala med en specialist
+      - Jag vill tala med kundtjänst
+      - Jag vill fortsätta med live-support
+      - Jag vill tala med en rådgivare
+      - Jag vill tala med en riktig tekniker
+      - Jag vill tala med en medarbetare
+      - Jag vill tala med en tekniker
+      - Tala med någon på teknisk support
+
+  actions:
+    - kind: SendActivity
+      id: sendMessage_s39DCt
+      conversationOutcome: Escalated
+      activity: |-
+        För denna copilot är det inte konfigurerat att eskalera till en representant, men det är här som agenten kan ge information om hur man tar kontakt med någon annan på något annat sätt.
+
+        Finns det något annat jag kan hjälpa dig med?

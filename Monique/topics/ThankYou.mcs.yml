@@ -1,0 +1,19 @@
+mcs.metadata:
+  componentName: Tack
+  description: Det här ämnet utlöses när användaren säger tack.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Tack
+    includeInOnSelectIntent: false
+    triggerQueries:
+      - tack
+      - tackar
+      - tack så mycket
+
+  actions:
+    - kind: SendActivity
+      id: sendMessage_9iz6v7
+      activity: Ingen orsak.

@@ -1,0 +1,166 @@
+﻿{
+  "properties": {
+    "connectionReferences": {
+      "keyvault": {
+        "api": {
+          "id": "/subscriptions/{subscription-id}/providers/Microsoft.Web/locations/{region}/managedApis/keyvault"
+        },
+        "connection": {
+          "id": "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Web/connections/keyvault"
+        },
+        "authentication": {
+          "type": "ManagedServiceIdentity"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "f6ebbb0e-2e6a-4dd0-99c5-6b77d4eb6e81"
+          },
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "SearchTerm",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_Client_Secret_from_Key_Vault": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "kv-get-secret-graph-client"
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['keyvault']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/secrets/@{encodeURIComponent('agent-4d9ba878-secret')}/value"
+          }
+        },
+        "HTTP": {
+          "runAfter": {
+            "Get_Client_Secret_from_Key_Vault": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "0a25b3d1-d08c-402f-8fd7-e192fb33edbc"
+          },
+          "type": "Http",
+          "inputs": {
+            "uri": "https://login.microsoftonline.com/1d7bf184-976a-4221-bbb4-18240175ed7d/oauth2/v2.0/token",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            "body": "@concat('client_id=4d9ba878-3a01-461c-825a-741d3bac0a75&scope=https://graph.microsoft.com/.default&client_secret=',body('Get_Client_Secret_from_Key_Vault')?['value'],'&grant_type=client_credentials')"
+          }
+        },
+        "Parse_JSON": {
+          "runAfter": {
+            "HTTP": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f7f1f0ee-599e-4b9b-bafa-3a5d6d4aa373"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": "@body(\u0027HTTP\u0027)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "access_token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "HTTP_2": {
+          "runAfter": {
+            "Parse_JSON": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5364ba8d-40f3-42d9-83af-023569e5b5e7"
+          },
+          "type": "Http",
+          "inputs": {
+            "uri": "@concat(\u0027https://graph.microsoft.com/v1.0/users?$search=\u0022displayName:\u0027,triggerBody()?[\u0027text\u0027],\u0027\u0022\u0026$select=displayName,userPrincipalName,mail,jobTitle,department,accountEnabled\u0027)",
+            "method": "GET",
+            "headers": {
+              "Authorization": "Bearer @{body(\u0027Parse_JSON\u0027)?[\u0027access_token\u0027]}",
+              "ConsistencyLevel": "eventual"
+            }
+          }
+        },
+        "Respond_to_Copilot": {
+          "runAfter": {
+            "HTTP_2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "c25963ba-5935-4ac8-bd2a-f31a8c48f954"
+          },
+          "type": "Response",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userresults": {
+                  "title": "UserResults",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "statusCode": 200,
+            "body": {
+              "userresults": "@{body(\u0027HTTP_2\u0027)}"
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

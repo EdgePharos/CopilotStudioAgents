@@ -1,0 +1,42 @@
+mcs.metadata:
+  componentName: Hej då
+  description: Det här ämnet utlöses när användaren säger hejdå. Som standard avslutas inte konversationen. Om du vill avsluta konversationen när användaren säger hejdå kan du lägga till åtgärden ”Slut på konversationen” eller omdirigera till systemämnet ”Slut på konversationen”.
+kind: AdaptiveDialog
+startBehavior: CancelOtherTopics
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Hej då
+    includeInOnSelectIntent: false
+    triggerQueries:
+      - Hej då
+      - Hej då tills vidare
+      - Hej så länge
+      - Nej tack. Hej då.
+      - Vi ses senare
+      - Vi hörs senare
+
+  actions:
+    - kind: Question
+      id: question_zf2HhP
+      variable: Topic.EndConversation
+      prompt: Vill du avsluta vårt samtal?
+      entity: BooleanPrebuiltEntity
+
+    - kind: ConditionGroup
+      id: condition_DGc1Wy
+      conditions:
+        - id: condition_DGc1Wy-item-0
+          condition: =Topic.EndConversation = true
+          actions:
+            - kind: BeginDialog
+              id: dn94DC
+              dialog: enk_Monique.topic.EndofConversation
+
+        - id: condition_DGc1Wy-item-1
+          condition: =Topic.EndConversation = false
+          actions:
+            - kind: SendActivity
+              id: sendMessage_LdLhmf
+              activity: Sätt i gång. Jag lyssnar.

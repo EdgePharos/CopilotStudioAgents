@@ -1,0 +1,15 @@
+mcs.metadata:
+  componentName: Konversationen börjar
+  description: Det här systemämnet utlöses när agenten tar emot en aktivitet som anger början på en ny konversation. Inaktivera ämnet om du inte vill att agenten ska initiera konversationen.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnConversationStart
+  id: main
+  actions:
+    - kind: SendActivity
+      id: sendMessage_M0LuhV
+      activity:
+        text:
+          - Hej, jag är {System.Bot.Name}, en virtuell assistent. Bara så du vet använder jag ibland AI för att besvara dina frågor. Om du angav en webbplats under skapandet kan du fråga mig om den! Sedan kan du ge mig lite mer kunskap genom att konfigurera generativ AI.
+        speak:
+          - Hej och tack för att du tar kontakt med {System.Bot.Name}. Observera att vissa svar genereras av AI och du bör kontrollera att de stämmer. Hur kan jag hjälpa dig i dag?

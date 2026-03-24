@@ -1,0 +1,8 @@
+mcs.metadata:
+  componentName: https://learn.microsoft.com/en-us/powershell
+  description: Installation, cmdlets, exempel
+kind: KnowledgeSourceConfiguration
+source:
+  kind: PublicSiteSearchSource
+  triggerCondition: true
+  site: https://learn.microsoft.com/en-us/powershell

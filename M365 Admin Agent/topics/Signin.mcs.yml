@@ -1,0 +1,22 @@
+mcs.metadata:
+  componentName: "Logga in "
+  description: Det här systemämnet utlöses när agenten måste logga in användaren eller be användaren logga in
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnSignIn
+  id: main
+  actions:
+    - kind: ConditionGroup
+      id: conditionGroup_ypjGKL
+      conditions:
+        - id: conditionItem_7XYIIR
+          condition: =System.SignInReason = SignInReason.SignInRequired
+          actions:
+            - kind: SendActivity
+              id: sendMessage_1jHUNO
+              activity: Hej! För att jag ska kunna hjälpa dig måste du logga in.
+
+    - kind: OAuthInput
+      id: gOjhZA
+      title: Inloggning
+      text: Logga in om du vill fortsätta

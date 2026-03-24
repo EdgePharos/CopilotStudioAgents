@@ -1,0 +1,27 @@
+mcs.metadata:
+  componentName: Hälsning
+  description: Det här ämnet utlöses när användaren hälsar på agenten.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Hälsning
+    includeInOnSelectIntent: false
+    triggerQueries:
+      - God middag
+      - Hej
+      - God morgon
+      - Hallå
+
+  actions:
+    - kind: SendActivity
+      id: sendMessage_abmysR
+      activity:
+        text:
+          - Hej. Vad kan jag hjälpa dig med i dag?
+        speak:
+          - Hej, <break strength="medium" />, vad kan jag hjälpa dig med?
+
+    - kind: CancelAllDialogs
+      id: cancelAllDialogs_01At22

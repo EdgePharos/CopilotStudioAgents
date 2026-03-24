@@ -1,0 +1,53 @@
+mcs.metadata:
+  componentName: UserLookup
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Användaruppslag
+    triggerQueries:
+      - Sök upp en användare
+      - Visa information om en användare
+      - Kontrollera en användares licenser
+      - Vilka grupper tillhör användaren
+      - Visa användarkonto
+      - Hämta användarinformation
+      - Kolla upp en person
+      - Vem har licens för
+      - Lista användare
+      - Visa användarens profil
+      - Visa användare
+      - Vilka licenser har
+      - Look up a user
+      - Show user info
+
+  actions:
+    - kind: Question
+      id: question_userSearch
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: init:Topic.TopicUserResults
+      prompt: Vilken användare vill du söka upp? Ange namn eller e-postadress.
+      entity: StringPrebuiltEntity
+
+    - kind: SendActivity
+      id: sendMessage_searching
+      activity: Söker efter användaren "{Topic.TopicUserResults}" i Microsoft Graph...
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_kIFMHk
+      input:
+        binding:
+          text: =Topic.TopicUserResults
+
+      output:
+        binding:
+          userresults: Topic.topicuserresults
+
+      flowId: 6115dc92-0327-f111-88b5-7ced8d46f2ca
+
+    - kind: SendActivity
+      id: sendActivity_ElGpq0
+      activity: "{Topic.topicuserresults}"
